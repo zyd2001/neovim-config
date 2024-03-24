@@ -1,0 +1,8 @@
+" highligh group setting
+hi link @lsp.typemod.operator.userDefined.cpp Function
+hi link cppStructure Statement
+syn keyword cppSpecialKeyword true false nullptr new delete this
+hi link cppSpecialKeyword PreProc
+syn keyword cppTypedef using typedef
+hi link cppTypedef Constant
+hi link cppModifier Statement
