@@ -7,7 +7,7 @@ hi link cppStructure Statement
 exec 'hi cConditional gui=italic guifg=' . s:ref
 hi link cRepeat cConditional
 hi link cLabel cRepeat
-syntax keyword cPrimitive bool char short int long unsigned signed float double void
+syntax keyword cPrimitive char short int long unsigned signed float double void
 hi link cPrimitive Statement
 syn keyword cControl return break continue
 exec 'hi cControl gui=italic guifg='.s:ref
