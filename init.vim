@@ -26,6 +26,8 @@ autocmd BufReadPost *
 " set and restore cursor shape
 autocmd VimLeave,VimSuspend * set guicursor=a:ver25
 cabbrev vhelp vertical help
+set screenoff=2
+set pumheight=20
 
 call plug#begin()
 Plug 'tpope/vim-surround'
@@ -44,12 +46,13 @@ Plug 'hrsh7th/vim-vsnip'
 Plug 'scrooloose/nerdcommenter'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'onsails/lspkind.nvim'
+" LSP manager
+Plug 'williamboman/mason.nvim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
-Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-"Plug 'bfrg/vim-cpp-modern'
+Plug 'kaicataldo/material.vim', { 'branch': 'main', 'do': 'bash ~/.config/nvim/scripts/updateMaterialColor.sh' }
 " show parentheses with color
 Plug 'luochen1990/rainbow'
 " show matching indent
@@ -57,10 +60,14 @@ Plug 'yggdroot/indentline'
 Plug 'tpope/vim-sleuth'
 
 Plug 'preservim/nerdtree'
+
+" git
 Plug 'tpope/vim-fugitive'
+Plug 'rbong/vim-flog'
+Plug 'APZelos/blamer.nvim'
 
 " debug
-Plug 'puremourning/vimspector'
+Plug 'puremourning/vimspector', { 'do': 'mkdir ./gadgets/linux/.gadgets.d/ -p && cp ~/.config/nvim/scripts/lldb-dap.json ./gadgets/linux/.gadgets.d/'}
 "Plug 'mfussenegger/nvim-dap'
 "Plug 'nvim-neotest/nvim-nio'
 "Plug 'rcarriga/nvim-dap-ui'
@@ -73,7 +80,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 
 " session manager
-Plug 'tpope/vim-obsession', { 'frozen': 1 }
+Plug 'tpope/vim-obsession', { 'frozen': 1, 'do': 'bash ~/.config/nvim/scripts/updateObsession.sh' }
 call plug#end()
 
 " rainbow setting
@@ -117,6 +124,12 @@ nmap <C-_> <leader>c<space>
 nnoremap <C-p> :Files<CR>
 autocmd SessionLoadPost * :let g:fzf_history_dir = './.fzf-history'
 
+" blamer setting
+let g:blamer_enabled = 1
+let g:blamer_delay = 500
+let g:blamer_show_in_visual_modes = 0
+let g:blamer_show_in_insert_modes = 0
+
 " NerdTree setting
 nnoremap <expr> <C-n> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : "\:NERDTreeFind<CR>"
 
@@ -129,17 +142,28 @@ nmap <Leader>di <Plug>VimspectorBalloonEval
 vmap <Leader>di <Plug>VimspectorBalloonEval
 
 " oscyank setting
-vmap <C-c> ygv<Plug>OSCYankVisual
+vmap <C-c> y
+" copy any text that is explicitly yanked
+function! s:VimOSCYankPostCallback(event)
+    if a:event.operator == 'y'
+        call OSCYankRegister(a:event.regname)
+    endif
+endfunction
+augroup VimOSCYankPost
+    autocmd!
+    autocmd TextYankPost * call s:VimOSCYankPostCallback(v:event)
+augroup END
 
 " obsession setting
 " auto restore
+" delete arguments to prevent session having empty buffer
 autocmd VimEnter * nested 
       \ if argc() == 1 && isdirectory(argv()[0]) |
       \     exec "cd " . argv()[0] |
+      \     %argdel |
       \     if empty(v:this_session) && filereadable('.session.vim') |
       \         source .session.vim |
       \     endif |
       \ endif
-map <F3> :Inspect<CR>
 
 lua require('init')
