@@ -95,7 +95,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = false
 require('lspconfig')['clangd'].setup { capabilities = capabilities }
 require('lspconfig')['pyright'].setup { capabilities = capabilities }
 -- disable inline error message
-vim.diagnostic.config({virtual_text = false})
+vim.diagnostic.config({virtual_text = false, signs = false})
 
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
