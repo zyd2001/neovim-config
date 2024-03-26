@@ -1,7 +1,8 @@
 set number relativenumber
 set hidden
 set termguicolors
-inoremap <C-s> <esc>:w<CR>
+" lock mark for `[` `]`
+inoremap <C-s> <esc>:lockmark w<CR>
 vnoremap <C-s> <esc>
 nnoremap <C-s> :w<CR>
 cnoremap <C-s> <esc>
@@ -9,13 +10,19 @@ nnoremap vb <C-v>
 nnoremap vo :browse oldfile<CR>
 nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
+nnoremap <C-a> ggVG
+nnoremap <C-q> :bd<CR>
+nnoremap <S-tab> <<
+nnoremap <expr> <tab> col('.') <= match(getline('.'), '\S') + 1 ? ">>" : "\<tab>"
+vmap <tab> >
+vmap <S-tab> <
+inoremap <S-tab> <C-d>
+command Q q
 set tabstop=4 shiftwidth=4 expandtab
 set backspace=indent,eol,start
 set ignorecase
 set smartcase
 set mouse=a
-nnoremap <C-a> ggVG
-nnoremap <C-q> :bd<CR>
 set list listchars+=space:· listchars-=eol:$ listchars+=tab:>-
 let g:vim_json_conceal=0
 " restore file last edit location
@@ -25,12 +32,15 @@ autocmd BufReadPost *
      \ endif
 " set and restore cursor shape
 autocmd VimLeave,VimSuspend * set guicursor=a:ver25
-command Q q
 cabbrev vhelp vertical help
 set scrolloff=2
 set pumheight=20
+" lock mark when explicit save, for '[' ']'
+"cnoremap <expr> w getcmdtype() == ':' ? (getcmdpos() == 1 ? 'lockmarks w' : 'w') : 'w'
 
 call plug#begin()
+" auto pair
+Plug 'cohama/lexima.vim'
 Plug 'tpope/vim-surround'
 
 " completion
@@ -114,8 +124,9 @@ imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l
 smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+"imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+let g:vsnip_snippet_dir = '~/.config/nvim/vsnip'
 
 " commenter setting
 vmap <C-_> <leader>c<space>
