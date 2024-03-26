@@ -25,8 +25,9 @@ autocmd BufReadPost *
      \ endif
 " set and restore cursor shape
 autocmd VimLeave,VimSuspend * set guicursor=a:ver25
+command Q q
 cabbrev vhelp vertical help
-set screenoff=2
+set scrolloff=2
 set pumheight=20
 
 call plug#begin()
