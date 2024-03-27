@@ -93,7 +93,8 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 require('lspconfig')['clangd'].setup { capabilities = capabilities }
-require('lspconfig')['pyright'].setup { capabilities = capabilities }
+--require('lspconfig')['pyright'].setup { capabilities = capabilities }
+require('lspconfig')['jedi_language_server'].setup { capabilities = capabilities }
 -- disable inline error message
 vim.diagnostic.config({virtual_text = false, signs = false})
 
