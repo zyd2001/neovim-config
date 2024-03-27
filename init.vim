@@ -24,7 +24,7 @@ set ignorecase
 set smartcase
 set mouse=a
 set list listchars+=space:· listchars-=eol:$ listchars+=tab:>-
-let g:vim_json_conceal=0
+set nofixendofline
 " restore file last edit location
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -33,6 +33,7 @@ autocmd BufReadPost *
 " set and restore cursor shape
 autocmd VimLeave,VimSuspend * set guicursor=a:ver25
 cabbrev vhelp vertical help
+cabbrev n noh
 set scrolloff=2
 set pumheight=20
 " lock mark when explicit save, for '[' ']'
@@ -100,6 +101,11 @@ let g:rainbow_conf = {
 \   'guifgs': ['#ffd700', '#da70d6', '#179fff'],
 \   'operators':''
 \}
+
+" indentline setting
+"let g:indentLine_setConceal = 0
+let g:vim_json_conceal=0
+let g:markdown_syntax_conceal=0
 
 " colorscheme setting
 "colorscheme onedark
