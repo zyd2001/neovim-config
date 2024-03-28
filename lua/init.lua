@@ -1,4 +1,24 @@
+-- disable netrw for nvim tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+local bufferline = require("bufferline")
 require('lsp')
+bufferline.setup({
+  options = {
+    separator_style = "slant",
+    style_preset = bufferline.style_preset.no_italic,
+    numbers = "ordinal"
+  }
+})
+require("nvim-tree").setup({
+  filesystem_watchers = {
+    enable = false
+  },
+  hijack_directories = {
+    auto_open = false,
+  },
+})
 
 -- set lsp semantic highlighting
 local links = {

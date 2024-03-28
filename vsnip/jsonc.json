@@ -4,12 +4,6 @@
         "body": [
           "\"$1\": {",
           "\t\"adapter\": \"lldb-dap\",",
-          "\t\"configuration\": {",
-          "\t\t\"request\": \"launch\",",
-          "\t\t\"program\": \"\",",
-          "\t\t\"args\": [],",
-          "\t\t\"cwd\": \"${workspaceRoot}\",",
-          "\t\t\"env\": [\"TERM=dumb\"]",
           "\t\t\"breakpoints\": {",
           "\t\t\t\"exception\": {",
           "\t\t\t\t\"cpp_throw\": \"Y\",",
@@ -19,7 +13,13 @@
           "\t\t\t\t\"swift_throw\": \"Y\",",
           "\t\t\t\t\"swift_catch\": \"Y\"",
           "\t\t\t}",
-          "\t\t}",
+          "\t\t},",
+          "\t\"configuration\": {",
+          "\t\t\"request\": \"launch\",",
+          "\t\t\"program\": \"\",",
+          "\t\t\"args\": [],",
+          "\t\t\"cwd\": \"\\${workspaceRoot}\",",
+          "\t\t\"env\": [\"TERM=dumb\"]",
           "\t}",
           "}"
         ]

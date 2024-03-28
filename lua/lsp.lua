@@ -34,30 +34,56 @@ sources = cmp.config.sources({
   { name = 'buffer' },
 }),
 formatting = {
-  fields = {'abbr', 'kind', 'menu'},
-  format = function(entry, item)
-    local menu_icon = {
-      nvim_lsp = 'λ',
-      vsnip = '⋗',
-      buffer = 'Ω',
-      path = '🖫',
-    }
-
-    item.menu = menu_icon[entry.source.name]
-    function fit(text)
-      if text then
-        if text:len() > 40 then
-          text = string.format("%-37s", text) .. "..."
-        else
-          text = string.format("%-40s", text)
+  format = lspkind.cmp_format({
+    mode = "symbol",
+    menu = ({
+      buffer = "[Buffer]",
+      nvim_lsp = "[LSP]",
+      vsnip = "[VSnip]",
+      nvim_lua = "[Lua]",
+      latex_symbols = "[Latex]",
+    }),
+    before = function (entry, item)
+      function fit(text)
+        if text then
+          if text:len() > 40 then
+            text = string.format("%-37s", text:sub(1,37)) .. "..."
+          else
+            text = string.format("%-40s", text)
+          end
         end
+        return text
       end
-      return text
+      item.abbr = fit(item.abbr)
+      return item
     end
-    item.abbr = fit(item.abbr)
-    return item
-  end,
-}
+  }),
+},
+--formatting = {
+  --fields = {'abbr', 'kind', 'menu'},
+  --format = function(entry, item)
+    --local menu_icon = {
+      --nvim_lsp = 'λ',
+      --vsnip = '⋗',
+      --buffer = 'Ω',
+      --path = '🖫',
+    --}
+
+    --item.menu = menu_icon[entry.source.name]
+    --function fit(text)
+      --if text then
+        --if text:len() > 40 then
+          --text = string.format("%-37s", text:sub(1,37)) .. "..."
+        --else
+          --text = string.format("%-40s", text)
+        --end
+      --end
+      --return text
+    --end
+    --item.abbr = fit(item.abbr)
+    --return item
+  --end,
+--}
 })
 
 -- Set configuration for specific filetype.

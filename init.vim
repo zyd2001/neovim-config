@@ -12,10 +12,13 @@ nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 nnoremap <C-a> ggVG
 nnoremap <C-q> :bd<CR>
+nnoremap <C-j> <C-i>
+nnoremap <C-k> <C-o>
 nnoremap <S-tab> <<
+" tab before the first letter indent
 nnoremap <expr> <tab> col('.') <= match(getline('.'), '\S') + 1 ? ">>" : "\<tab>"
-vmap <tab> >
-vmap <S-tab> <
+vmap <tab> >gv
+vmap <S-tab> <gv
 inoremap <S-tab> <C-d>
 command Q q
 set tabstop=4 shiftwidth=4 expandtab
@@ -71,8 +74,6 @@ Plug 'luochen1990/rainbow'
 Plug 'yggdroot/indentline'
 Plug 'tpope/vim-sleuth'
 
-Plug 'preservim/nerdtree'
-
 " git
 Plug 'tpope/vim-fugitive'
 Plug 'rbong/vim-flog'
@@ -93,6 +94,14 @@ Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 
 " session manager
 Plug 'tpope/vim-obsession', { 'frozen': 1, 'do': 'bash ~/.config/nvim/scripts/updateObsession.sh' }
+
+" buffer line
+Plug 'nvim-tree/nvim-web-devicons' " Recommended (for coloured icons)
+" Plug 'ryanoasis/vim-devicons' Icons without colours
+Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
+
+Plug 'nvim-tree/nvim-tree.lua'
+"Plug 'preservim/nerdtree'
 call plug#end()
 
 " rainbow setting
@@ -120,15 +129,15 @@ endif
 let g:airline_symbols.maxlinenr= ''
 let g:airline#extensions#branch#enabled = 1
 " Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#tab_nr_type = 1
-let g:airline#extensions#tabline#show_tab_nr = 1
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#tab_nr_type = 1
+"let g:airline#extensions#tabline#show_tab_nr = 1
 "let g:airline#extensions#tabline#fnamecollapse = 2
 "let g:airline#extensions#tabline#buffer_nr_show = 1
 "let g:airline#extensions#tabline#fnametruncate = 16
 "let g:airline#extensions#tabline#buffer_idx_mode = 1
 " Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
+"let g:airline#extensions#tabline#fnamemod = ':t'
 
 " vsnip setting
 " Expand or jump
@@ -154,8 +163,10 @@ let g:blamer_delay = 500
 let g:blamer_show_in_visual_modes = 0
 let g:blamer_show_in_insert_modes = 0
 
+" NvimTree setting
 " NerdTree setting
-nnoremap <expr> <C-n> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : "\:NERDTreeFind<CR>"
+"nnoremap <expr> <C-n> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : "\:NERDTreeFind<CR>"
+nnoremap <C-n> :NvimTreeFindFileToggle<CR>
 
 " vimspector setting
 let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
@@ -185,6 +196,7 @@ autocmd VimEnter * nested
       \ if argc() == 1 && isdirectory(argv()[0]) |
       \     exec "cd " . argv()[0] |
       \     %argdel |
+      \     bw |
       \     if empty(v:this_session) && filereadable('.session.vim') |
       \         source .session.vim |
       \     endif |
