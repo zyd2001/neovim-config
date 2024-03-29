@@ -33,6 +33,7 @@ autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
+command CSpace :%s/\s\+$//e
 " set and restore cursor shape
 autocmd VimLeave,VimSuspend * set guicursor=a:ver25
 cabbrev vhelp vertical help
@@ -139,11 +140,15 @@ let g:airline#extensions#branch#enabled = 1
 " Show just the filename
 "let g:airline#extensions#tabline#fnamemod = ':t'
 
+" buffer line setting
+command -narg=1 GOTO :execute 'lua require("bufferline").go_to(<args>, true)'
+nnoremap gt :<c-u>execute "GOTO " . v:count<CR>
+
 " vsnip setting
 " Expand or jump
 imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+"imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 "imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
@@ -192,7 +197,7 @@ augroup END
 " obsession setting
 " auto restore
 " delete arguments to prevent session having empty buffer
-autocmd VimEnter * nested 
+autocmd VimEnter * nested
       \ if argc() == 1 && isdirectory(argv()[0]) |
       \     exec "cd " . argv()[0] |
       \     %argdel |
