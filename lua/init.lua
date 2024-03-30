@@ -19,6 +19,7 @@ require("nvim-tree").setup({
     auto_open = false,
   },
 })
+require("mason").setup();
 
 -- set lsp semantic highlighting
 local links = {

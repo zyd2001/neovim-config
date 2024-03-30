@@ -16,3 +16,5 @@ highlight! link CmpItemKindMethod CmpItemKindFunction
 highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
 highlight! link CmpItemKindProperty CmpItemKindKeyword
 highlight! link CmpItemKindUnit CmpItemKindKeyword
+
+highlight! LineNr guifg=#464d69

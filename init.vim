@@ -12,14 +12,17 @@ nnoremap H :bprevious<CR>
 nnoremap L :bnext<CR>
 nnoremap <C-a> ggVG
 nnoremap <C-q> :bd<CR>
-nnoremap <C-j> <C-i>
-nnoremap <C-k> <C-o>
+nnoremap <M-o> <C-i>
+nnoremap <M-i> <C-o>
 nnoremap <S-tab> <<
 " tab before the first letter indent
 nnoremap <expr> <tab> col('.') <= match(getline('.'), '\S') + 1 ? ">>" : "\<tab>"
 vmap <tab> >gv
 vmap <S-tab> <gv
 inoremap <S-tab> <C-d>
+omap <C-s> <esc>
+nmap U u
+command E e
 command Q q
 set tabstop=4 shiftwidth=4 expandtab
 set backspace=indent,eol,start
@@ -58,7 +61,6 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
 Plug 'scrooloose/nerdcommenter'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'onsails/lspkind.nvim'
@@ -185,8 +187,12 @@ vmap <Leader>di <Plug>VimspectorBalloonEval
 vmap <C-c> y
 " copy any text that is explicitly yanked
 function! s:VimOSCYankPostCallback(event)
-    if a:event.operator == 'y'
-        call OSCYankRegister(a:event.regname)
+    if empty(a:event) " NvimTree weird behavior
+        call OSCYankRegister('0')
+    else
+        if a:event.operator == 'y'
+            call OSCYankRegister(a:event.regname)
+        endif
     endif
 endfunction
 augroup VimOSCYankPost
@@ -206,5 +212,22 @@ autocmd VimEnter * nested
       \         source .session.vim |
       \     endif |
       \ endif
+" use shada per session
+if filereadable('.session.shada')
+    set shadafile=.session.shada
+endif
+" command that make shada
+function! CreateSession(bang)
+    if !a:bang
+        call writefile([], '.session.shada')
+        set shadafile=.session.shada
+        Obsession
+    else
+        set shadafile=
+        call delete('.session.shada')
+        Obsession!
+    endif
+endfunction
+command -bang Session call CreateSession(<bang>0)
 
 lua require('init')
