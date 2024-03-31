@@ -2,9 +2,9 @@ set number relativenumber
 set hidden
 set termguicolors
 " lock mark for `[` `]`
-inoremap <C-s> <esc>:lockmark w<CR>
+inoremap <C-s> <esc>:lockmark up<CR>
 vnoremap <C-s> <esc>
-nnoremap <C-s> :w<CR>
+nnoremap <C-s> :up<CR>
 cnoremap <C-s> <esc>
 nnoremap vb <C-v>
 nnoremap vo :browse oldfile<CR>
@@ -48,8 +48,10 @@ set pumheight=20
 
 call plug#begin()
 " auto pair
-Plug 'cohama/lexima.vim'
-Plug 'tpope/vim-surround'
+Plug 'windwp/nvim-autopairs'
+"Plug 'cohama/lexima.vim'
+Plug 'kylechui/nvim-surround'
+"Plug 'tpope/vim-surround'
 
 " completion
 Plug 'hrsh7th/vim-vsnip'
@@ -105,6 +107,11 @@ Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 
 Plug 'nvim-tree/nvim-tree.lua'
 "Plug 'preservim/nerdtree'
+
+" lua definition for vim api
+Plug 'folke/neodev.nvim'
+
+Plug 'voldikss/vim-floaterm'
 call plug#end()
 
 " rainbow setting
@@ -163,6 +170,7 @@ nmap <C-_> <leader>c<space>
 " FZF setting
 nnoremap <C-p> :Files<CR>
 autocmd SessionLoadPost * :let g:fzf_history_dir = './.fzf-history'
+command! -bang -nargs=+ -complete=dir Agi call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " blamer setting
 let g:blamer_enabled = 1
@@ -173,7 +181,7 @@ let g:blamer_show_in_insert_modes = 0
 " NvimTree setting
 " NerdTree setting
 "nnoremap <expr> <C-n> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : "\:NERDTreeFind<CR>"
-nnoremap <C-n> :NvimTreeFindFileToggle<CR>
+nnoremap <expr> <C-n> &filetype == "NvimTree" ? "\:NvimTreeClose<CR>" : "\:NvimTreeFindFile<CR>"
 
 " vimspector setting
 let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
@@ -187,12 +195,8 @@ vmap <Leader>di <Plug>VimspectorBalloonEval
 vmap <C-c> y
 " copy any text that is explicitly yanked
 function! s:VimOSCYankPostCallback(event)
-    if empty(a:event) " NvimTree weird behavior
-        call OSCYankRegister('0')
-    else
-        if a:event.operator == 'y'
-            call OSCYankRegister(a:event.regname)
-        endif
+    if a:event.operator == 'y'
+        call OSCYankRegister(a:event.regname)
     endif
 endfunction
 augroup VimOSCYankPost

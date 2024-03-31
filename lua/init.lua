@@ -1,9 +1,4 @@
--- disable netrw for nvim tree
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 local bufferline = require("bufferline")
-require('lsp')
 bufferline.setup({
   options = {
     separator_style = "slant",
@@ -11,6 +6,9 @@ bufferline.setup({
     numbers = "ordinal"
   }
 })
+-- disable netrw for nvim tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 require("nvim-tree").setup({
   filesystem_watchers = {
     enable = false
@@ -18,8 +16,17 @@ require("nvim-tree").setup({
   hijack_directories = {
     auto_open = false,
   },
+  actions = {
+    use_system_clipboard = false,
+  }
 })
-require("mason").setup();
+require("mason").setup()
+require("nvim-surround").setup()
+require("neodev").setup() -- must before lsp
+require('nvim-autopairs').setup({
+  break_undo = false
+})
+require('lsp')
 
 -- set lsp semantic highlighting
 local links = {
