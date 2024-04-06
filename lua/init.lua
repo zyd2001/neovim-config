@@ -26,6 +26,13 @@ require("neodev").setup() -- must before lsp
 require('nvim-autopairs').setup({
   break_undo = false
 })
+require('fzf-lua').setup({
+  'fzf-vim',
+  winopts={preview={hidden='nohidden'}},
+  defaults = {
+    git_icons = false,
+    -- file_icons = false,
+  }})
 require('lsp')
 
 -- set lsp semantic highlighting

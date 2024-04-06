@@ -93,6 +93,7 @@ Plug 'puremourning/vimspector', { 'do': 'mkdir ./gadgets/linux/.gadgets.d/ -p &&
 " search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
 
 " enable clipboard
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
@@ -166,6 +167,7 @@ let g:vsnip_snippet_dir = '~/.config/nvim/vsnip'
 " commenter setting
 vmap <C-_> <leader>c<space>
 nmap <C-_> <leader>c<space>
+let g:NERDSpaceDelims = 1
 
 " FZF setting
 nnoremap <C-p> :Files<CR>
@@ -235,5 +237,8 @@ function! CreateSession(bang)
     endif
 endfunction
 command -bang Session call CreateSession(<bang>0)
+
+" Floaterm setting
+let g:floaterm_keymap_toggle = '<c-space>'
 
 lua require('init')
