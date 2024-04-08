@@ -46,8 +46,6 @@ cabbrev vhelp vertical help
 cabbrev n noh
 set scrolloff=2
 set pumheight=20
-" lock mark when explicit save, for '[' ']'
-"cnoremap <expr> w getcmdtype() == ':' ? (getcmdpos() == 1 ? 'lockmarks w' : 'w') : 'w'
 
 call plug#begin()
 " auto pair
@@ -136,6 +134,7 @@ let g:markdown_syntax_conceal=0
 let g:material_terminal_italics = 1
 let g:material_theme_style='palenight'
 colorscheme material
+hi link markdownError NONE
 
 " airline setting
 if !exists('g:airline_symbols')

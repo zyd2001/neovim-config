@@ -135,7 +135,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   vim.lsp.handlers.hover,
-  {border = 'rounded'}
+  {
+    border = 'single'
+  }
 )
 
 -- Use LspAttach autocommand to only map the following keys
