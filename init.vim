@@ -32,10 +32,13 @@ set mouse=a
 set list listchars+=space:· listchars-=eol:$ listchars+=tab:>-
 set nofixendofline
 " restore file last edit location
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
+augroup VimStartUp
+    au!
+    autocmd BufReadPost *
+         \ if line("'\"") > 0 && line("'\"") <= line("$") |
+         \   exe "normal! g`\"" |
+         \ endif
+augroup END
 command CSpace :%s/\s\+$//e
 " set and restore cursor shape
 autocmd VimLeave,VimSuspend * set guicursor=a:ver25
@@ -61,7 +64,8 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
+" Plug 'hrsh7th/nvim-cmp'
+Plug 'zyd2001/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'scrooloose/nerdcommenter'
 Plug 'ray-x/lsp_signature.nvim'
@@ -172,7 +176,7 @@ let g:NERDSpaceDelims = 1
 " FZF setting
 nnoremap <C-p> :Files<CR>
 autocmd SessionLoadPost * :let g:fzf_history_dir = './.fzf-history'
-command! -bang -nargs=+ -complete=dir Agi call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
+" command! -bang -nargs=+ -complete=dir Agi call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " blamer setting
 let g:blamer_enabled = 1
@@ -209,6 +213,16 @@ augroup VimOSCYankPost
 augroup END
 
 " obsession setting
+function! ClearAllHistoryForNewSession()
+    clearjumps
+    delmarks!
+    delmarks A-Z0-9
+    call histdel('/')
+    call histdel('@')
+    call histdel('>')
+    call histdel('=')
+    call histdel(':')
+endfunction
 " auto restore
 " delete arguments to prevent session having empty buffer
 autocmd VimEnter * nested
@@ -221,18 +235,24 @@ autocmd VimEnter * nested
       \     endif |
       \ endif
 " use shada per session
-if filereadable('.session.shada')
-    set shadafile=.session.shada
+if argc() == 1 && isdirectory(argv()[0])
+    if filereadable(argv()[0] . '/.session.shada')
+        let &shadafile=argv()[0] . '/.session.shada'
+    endif
 endif
 " command that make shada
 function! CreateSession(bang)
     if !a:bang
         call writefile([], '.session.shada')
         set shadafile=.session.shada
+        call ClearAllHistoryForNewSession()
         Obsession
+        doau SessionLoadPost *
     else
         set shadafile=
         call delete('.session.shada')
+        call delete(g:fzf_history_dir, 'rf')
+        unlet g:fzf_history_dir
         Obsession!
     endif
 endfunction

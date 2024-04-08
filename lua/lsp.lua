@@ -38,7 +38,7 @@ sources = cmp.config.sources({
 }),
 formatting = {
   format = lspkind.cmp_format({
-    mode = "symbol",
+    mode = "symbol_text",
     menu = ({
       buffer = "[Buffer]",
       nvim_lsp = "[LSP]",

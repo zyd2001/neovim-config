@@ -18,20 +18,23 @@ require("nvim-tree").setup({
   },
   actions = {
     use_system_clipboard = false,
+  },
+  filters = {
+    git_ignored = false
   }
 })
 require("mason").setup()
 require("nvim-surround").setup()
 require("neodev").setup() -- must before lsp
 require('nvim-autopairs').setup({
-  break_undo = false
+  break_undo = false,
+  enable_afterquote = false,
 })
 require('fzf-lua').setup({
   'fzf-vim',
-  winopts={preview={hidden='nohidden'}},
+  file_icon_padding = ' ',
   defaults = {
     git_icons = false,
-    -- file_icons = false,
   }})
 require('lsp')
 
