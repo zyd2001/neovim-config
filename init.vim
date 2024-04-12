@@ -79,6 +79,7 @@ Plug 'kaicataldo/material.vim', { 'branch': 'main', 'do': 'bash ~/.config/nvim/s
 Plug 'luochen1990/rainbow'
 " show matching indent
 Plug 'yggdroot/indentline'
+" auto detect indent
 Plug 'tpope/vim-sleuth'
 
 " git
@@ -128,6 +129,7 @@ let g:rainbow_conf = {
 "let g:indentLine_setConceal = 0
 let g:vim_json_conceal=0
 let g:markdown_syntax_conceal=0
+let g:indentLine_showFirstIndentLevel=1
 
 " colorscheme setting
 "colorscheme onedark
@@ -174,6 +176,7 @@ let g:NERDSpaceDelims = 1
 
 " FZF setting
 nnoremap <C-p> :Files<CR>
+nnoremap <leader><C-p> :Buffers<CR>
 autocmd SessionLoadPost * :let g:fzf_history_dir = './.fzf-history'
 " command! -bang -nargs=+ -complete=dir Agi call fzf#vim#ag_raw(<q-args>, fzf#vim#with_preview(), <bang>0)
 

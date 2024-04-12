@@ -118,12 +118,16 @@ matching = { disallow_symbol_nonprefix_matching = false }
 })
 
 -- Set up lspconfig.
+local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
-require('lspconfig')['clangd'].setup { capabilities = capabilities }
-require('lspconfig')['lua_ls'].setup { capabilities = capabilities }
-require('lspconfig')['jedi_language_server'].setup { capabilities = capabilities }
+lspconfig['clangd'].setup {
+  capabilities = capabilities,
+  root_dir = lspconfig.util.root_pattern(".git") or vim.fn.getcwd(),
+}
+lspconfig['lua_ls'].setup { capabilities = capabilities }
+lspconfig['jedi_language_server'].setup { capabilities = capabilities }
 -- disable inline error message
 vim.diagnostic.config({virtual_text = false, signs = false})
 
@@ -165,9 +169,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<f2>', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    --vim.keymap.set('n', '<space>f', function()
-      --vim.lsp.buf.format { async = true }
-    --end, opts)
+    vim.keymap.set('n', '<leader>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
   end,
 })
 
